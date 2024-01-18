@@ -10,7 +10,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Customers")
 public class Customers {
     @Id
     @GeneratedValue
@@ -21,4 +20,7 @@ public class Customers {
     private String userName;
 
     private String password;
+
+    private int orderId;
+
 }

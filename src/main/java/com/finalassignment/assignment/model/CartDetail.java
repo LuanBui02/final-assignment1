@@ -7,19 +7,21 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Items {
+@Entity
+public class CartDetail {
     @Id
     @GeneratedValue
     private int id;
 
-    private int orderDetailId;
+    private int cartId;
 
-    private String name;
+    private int itemId;
 
-    private double price;
+    private int quantity;
+
+    private int dateAdded;
 }

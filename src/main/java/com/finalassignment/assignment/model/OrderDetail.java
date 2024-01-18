@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "OrderDetail")
 public class OrderDetail {
     @Id
     @GeneratedValue
