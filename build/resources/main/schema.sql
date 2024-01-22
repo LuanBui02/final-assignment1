@@ -1,34 +1,33 @@
-CREATE TABLE CARTS (
-    id number,
-    customer_id number,
-    PRIMARY KEY (id)
+CREATE TABLE carts (
+       id number,
+       customer_id number,
+       PRIMARY KEY (id)
 );
-
-CREATE TABLE CUSTOMERS (
+CREATE TABLE customers (
     id number,
-    userName VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    username varchar(255) not null,
+    password varchar(255) not null,
     type varchar(50),
     PRIMARY KEY (id)
 );
 
-CREATE TABLE CART_DETAILS (
+CREATE TABLE cart_details (
     id number,
     cart_id number,
     item_id number,
     quantity number,
-    date_added number,
+    date_added date,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE ITEMS (
+CREATE TABLE items (
     id number,
-    name VARCHAR(255),
+    name varchar(255),
     price number,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE ORDER_DETAILS (
+CREATE TABLE order_details (
     id number,
     order_id number,
     item_id number,
@@ -36,29 +35,29 @@ CREATE TABLE ORDER_DETAILS (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Orders (
+CREATE TABLE orders (
     id number,
     customer_id number,
-    order_date DATE,
+    order_date date,
     is_complete number(1),
     PRIMARY KEY (id)
 );
 
-ALTER TABLE Orders
+ALTER TABLE orders
     ADD CONSTRAINT FK_CustomerOrder
-    FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(id);
-ALTER TABLE CART_DETAILS
+    FOREIGN KEY (customer_id) REFERENCES customers(id);
+ALTER TABLE cart_details
     ADD CONSTRAINT FK_CartId
-    FOREIGN KEY (cart_id) REFERENCES CARTS(id);
-ALTER TABLE CART_DETAILS
+    FOREIGN KEY (cart_id) REFERENCES carts(id);
+ALTER TABLE cart_details
     ADD CONSTRAINT FK_ItemId
-    FOREIGN KEY (item_id) REFERENCES ITEMS(id);
-ALTER TABLE Carts
+    FOREIGN KEY (item_id) REFERENCES items(id);
+ALTER TABLE carts
     ADD CONSTRAINT FK_CustomerId
-    FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(id);
-ALTER TABLE ORDER_DETAILS
+    FOREIGN KEY (customer_id) REFERENCES customers(id);
+ALTER TABLE order_details
     ADD CONSTRAINT FK_ItemsId
-    FOREIGN KEY (item_id) REFERENCES ITEMS(id);
-ALTER TABLE ORDER_DETAILS
+    FOREIGN KEY (item_id) REFERENCES items(id);
+ALTER TABLE order_details
     ADD CONSTRAINT FK_OrderId
-    FOREIGN KEY (order_id) REFERENCES Orders(id);
+    FOREIGN KEY (order_id) REFERENCES orders(id);

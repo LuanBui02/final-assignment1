@@ -19,7 +19,7 @@ public class OrderDetail {
 
     private int orderId;
 
-    private int ItemId;
+    private int itemId;
 
     private int quantity;
 }
