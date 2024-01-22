@@ -1,8 +1,22 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "gradle.plugin.org.flywaydb:gradle-plugin-publishing:8.5.0"
+	}
+}
+
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.0'
+	id 'org.springframework.boot' version '2.7.6'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id "org.flywaydb.flyway" version "8.5.0"
+
 }
+apply plugin: "org.flywaydb.flyway"
 
 group = 'com.final-assignment'
 version = '0.0.1-SNAPSHOT'
