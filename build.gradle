@@ -8,7 +8,6 @@ buildscript {
 		classpath "gradle.plugin.org.flywaydb:gradle-plugin-publishing:8.5.0"
 	}
 }
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.6'
@@ -27,6 +26,15 @@ java {
 
 repositories {
 	mavenCentral()
+}
+flyway {
+	driver = 'oracle.jdbc.OracleDriver'
+	user = 'sbpsdev_intern'
+	password = 'sbpsdev_intern'
+//	driver = 'org.apache.derby.jdbc.ClientDriver'
+	url = 'jdbc:oracle:thin:@172.16.0.6:1522:ORCLCDB'
+	locations = ['filesystem:src/main/resources/']
+
 }
 
 dependencies {
