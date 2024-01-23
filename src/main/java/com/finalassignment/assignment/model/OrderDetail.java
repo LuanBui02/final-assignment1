@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
@@ -19,10 +21,17 @@ public class OrderDetail {
     @Id
     @GeneratedValue
     private int id;
-    @Column(name = "order_id")
-    private int orderId;
-    @Column(name = "item_id")
-    private int itemId;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
+
     @Column(name = "quantity")
     private int quantity;
+
+
 }
