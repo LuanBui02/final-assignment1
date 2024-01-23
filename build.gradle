@@ -1,18 +1,18 @@
 buildscript {
-	repositories {
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-	}
-	dependencies {
-		classpath "gradle.plugin.org.flywaydb:gradle-plugin-publishing:8.5.0"
-	}
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.org.flywaydb:gradle-plugin-publishing:8.5.0"
+    }
 }
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.6'
-	id 'io.spring.dependency-management' version '1.1.4'
-	id "org.flywaydb.flyway" version "8.5.0"
+    id 'java'
+    id 'org.springframework.boot' version '2.7.6'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id "org.flywaydb.flyway" version "8.5.0"
 }
 apply plugin: "org.flywaydb.flyway"
 
@@ -20,34 +20,34 @@ group = 'com.final-assignment'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '11'
+    sourceCompatibility = '11'
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 flyway {
-	driver = 'oracle.jdbc.OracleDriver'
-	user = 'sbpsdev_intern'
-	password = 'sbpsdev_intern'
-	url = 'jdbc:oracle:thin:@172.16.0.6:1522:ORCLCDB'
-	locations = ['filesystem:src/main/resources/']
+    driver = 'oracle.jdbc.OracleDriver'
+    user = 'sbpsdev_intern'
+    password = 'sbpsdev_intern'
+    url = 'jdbc:oracle:thin:@172.16.0.6:1522:ORCLCDB'
+    locations = ['filesystem:src/main/resources/']
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.5'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.5'
 }
 
 tasks.named('bootBuildImage') {
-	builder = 'paketobuildpacks/builder-jammy-base:latest'
+    builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
