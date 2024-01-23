@@ -10,7 +10,6 @@ CREATE TABLE customers (
     type varchar(50),
     PRIMARY KEY (id)
 );
-
 CREATE TABLE cart_details (
     id number,
     cart_id number,
