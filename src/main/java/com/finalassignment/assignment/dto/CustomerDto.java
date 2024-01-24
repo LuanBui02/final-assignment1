@@ -1,7 +1,5 @@
 package com.finalassignment.assignment.dto;
 
-import com.finalassignment.assignment.model.Cart;
-import com.finalassignment.assignment.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +14,6 @@ public class CustomerDto {
     private String username;
     private String password;
     private String type;
-    private Set<Cart> carts;
-    private Set<Order> orders;
+    private Set<CartDto> carts;
+    private Set<OrderDto> orders;
 }

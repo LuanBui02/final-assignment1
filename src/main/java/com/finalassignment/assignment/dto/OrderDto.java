@@ -2,7 +2,6 @@ package com.finalassignment.assignment.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finalassignment.assignment.model.Customer;
-import com.finalassignment.assignment.model.OrderDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +20,5 @@ public class OrderDto {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date orderDate;
     private boolean isComplete;
-    private Set<OrderDetail> orderDetails;
+    private Set<OrderDetailDto> orderDetails;
 }
