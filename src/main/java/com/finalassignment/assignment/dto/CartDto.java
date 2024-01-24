@@ -1,6 +1,5 @@
 package com.finalassignment.assignment.dto;
 
-import com.finalassignment.assignment.model.Customer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class CartDto {
     private int id;
-    private Customer customer;
+    private CustomerDto customerDto;
     private Set<CartDetailDto> cartDetailsDto;
 }
