@@ -32,7 +32,7 @@ public class Customer {
     @Column(name = "type")
     private String type;
 
-    @OneToMany(mappedBy = "customerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Cart> carts;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)

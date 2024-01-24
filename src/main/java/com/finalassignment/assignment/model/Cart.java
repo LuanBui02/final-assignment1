@@ -26,7 +26,7 @@ public class Cart {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customerId;
+    private Customer customer;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartDetail> cartDetails;
