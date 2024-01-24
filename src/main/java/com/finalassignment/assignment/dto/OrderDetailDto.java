@@ -1,5 +1,7 @@
 package com.finalassignment.assignment.dto;
 
+import com.finalassignment.assignment.model.Item;
+import com.finalassignment.assignment.model.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderDetailDto {
     private int id;
-    private int orderId;
-    private int itemId;
+    private Order order;
+    private Item item;
     private int quantity;
 }
