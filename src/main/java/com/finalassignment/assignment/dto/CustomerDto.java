@@ -14,6 +14,6 @@ public class CustomerDto {
     private String username;
     private String password;
     private String type;
-    private Set<CartDto> carts;
-    private Set<OrderDto> orders;
+    private Set<CartDto> cartsDto;
+    private Set<OrderDto> ordersDto;
 }

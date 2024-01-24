@@ -20,5 +20,5 @@ public class OrderDto {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date orderDate;
     private boolean isComplete;
-    private Set<OrderDetailDto> orderDetails;
+    private Set<OrderDetailDto> orderDetailsDto;
 }

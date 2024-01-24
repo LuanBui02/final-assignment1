@@ -13,5 +13,5 @@ import java.util.Set;
 public class CartDto {
     private int id;
     private Customer customer;
-    private Set<CartDetailDto> cartDetails;
+    private Set<CartDetailDto> cartDetailsDto;
 }

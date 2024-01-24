@@ -13,6 +13,6 @@ public class ItemDto {
     private int id;
     private String name;
     private int price;
-    private Set<CartDetailDto> cartDetails;
-    private Set<OrderDetailDto> orderDetails;
+    private Set<CartDetailDto> cartDetailsDto;
+    private Set<OrderDetailDto> orderDetailsDto;
 }
