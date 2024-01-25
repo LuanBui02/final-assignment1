@@ -12,9 +12,9 @@ public interface CustomerMapper {
 
     @Mapping(source = "carts", target = "cartsDto")
     @Mapping(source = "orders", target = "ordersDto")
-    CustomerDto ModelToDto(Customer customer);
+    CustomerDto toDto(Customer customer);
 
     @Mapping(source = "cartsDto", target = "carts")
     @Mapping(source = "ordersDto", target = "orders")
-    Customer DtoToModel(CustomerDto customerDto);
+    Customer toModel(CustomerDto customerDto);
 }
