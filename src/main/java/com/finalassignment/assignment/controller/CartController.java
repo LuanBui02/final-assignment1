@@ -3,6 +3,7 @@ package com.finalassignment.assignment.controller;
 import com.finalassignment.assignment.model.Cart;
 import com.finalassignment.assignment.model.CartDetail;
 import com.finalassignment.assignment.model.Customer;
+import com.finalassignment.assignment.model.Item;
 import com.finalassignment.assignment.repository.CartDetailRepo;
 import com.finalassignment.assignment.repository.CartRepo;
 import com.finalassignment.assignment.repository.CustomerRepo;
@@ -59,15 +60,26 @@ public class CartController {
         cartDetailRepo.save(cartDetail);
     }
 
-//    @PostMapping()
-//    public Cart addItemInCart(@RequestBody Cart cart) {
-//        Customer customer = cart.getCustomer();
-//
-//        customer.setId(customer.getId());
-//
-//        cart.setCustomer(customer);
-//
-//        return cartRepo.save(cart);
-//    }
+    @PostMapping()
+    public CartDetail addItemInCart(@RequestBody CartDetail cartDetail, Customer customer, Item item) {
+
+        Cart cart = new Cart();
+
+        Customer newCustomer = new Customer();
+        newCustomer.setId(customer.getId());
+        newCustomer.setUsername(customer.getUsername());
+        cart.setCustomer(newCustomer);
+        cartDetail.setCart(cart);
+
+
+        Item newItem = new Item();
+
+        newItem.setId(item.getId());
+
+        cartDetail.setItem(newItem);
+
+
+        return cartDetailRepo.save(cartDetail);
+    }
 
 }
