@@ -1,14 +1,20 @@
 package com.finalassignment.assignment.controller;
 
+import com.finalassignment.assignment.dto.AddCartDto;
+import com.finalassignment.assignment.dto.CartDetailDto;
+import com.finalassignment.assignment.dto.CartDto;
+import com.finalassignment.assignment.dto.CustomerDto;
+import com.finalassignment.assignment.dto.ItemDto;
+import com.finalassignment.assignment.mapper.CartDetailMapper;
+import com.finalassignment.assignment.mapper.CartMapper;
 import com.finalassignment.assignment.model.Cart;
 import com.finalassignment.assignment.model.CartDetail;
 import com.finalassignment.assignment.model.Customer;
-import com.finalassignment.assignment.model.Item;
 import com.finalassignment.assignment.repository.CartDetailRepo;
 import com.finalassignment.assignment.repository.CartRepo;
 import com.finalassignment.assignment.repository.CustomerRepo;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/carts")
@@ -29,7 +34,8 @@ public class CartController {
     private CartRepo cartRepo;
     @Autowired
     private CartDetailRepo cartDetailRepo;
-
+    private final CartDetailMapper cartDetailMapper = Mappers.getMapper(CartDetailMapper.class);
+    private final CartMapper cartMapper = Mappers.getMapper(CartMapper.class);
     @GetMapping("/{customerId}")
     public Optional<Cart> getCartByCustomer(@PathVariable int customerId) {
         return cartRepo.findById(customerId);
@@ -54,32 +60,22 @@ public class CartController {
     public void addCustomer(@RequestBody Customer customer) {
         customerRepo.save(customer);
     }
-
-    @PostMapping("/cartDetail")
-    public void addCartDetail(@RequestBody CartDetail cartDetail) {
-        cartDetailRepo.save(cartDetail);
-    }
-
     @PostMapping()
-    public CartDetail addItemInCart(@RequestBody CartDetail cartDetail, Customer customer, Item item) {
+    public CartDetail addItemInCart(@RequestBody CartDetailDto cartDetailDto) {
+        CartDto cartDto = new CartDto();
 
-        Cart cart = new Cart();
+        CustomerDto customerDto = new CustomerDto();
+        cartDto.setId(customerDto.getId());
 
-        Customer newCustomer = new Customer();
-        newCustomer.setId(customer.getId());
-        newCustomer.setUsername(customer.getUsername());
-        cart.setCustomer(newCustomer);
-        cartDetail.setCart(cart);
+        cartDto.setCustomerDto(customerDto);
+        cartDetailDto.setCartDto(cartDto);
 
+        ItemDto itemDto = new ItemDto();
+        cartDetailDto.setItemDto(itemDto);
+        CartDetail model = cartDetailMapper.toModel(cartDetailDto);
+        return cartDetailRepo.save(model);
 
-        Item newItem = new Item();
-
-        newItem.setId(item.getId());
-
-        cartDetail.setItem(newItem);
-
-
-        return cartDetailRepo.save(cartDetail);
     }
+
 
 }
