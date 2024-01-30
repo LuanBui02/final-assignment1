@@ -1,5 +1,7 @@
 package com.finalassignment.assignment.dto;
 
+import com.finalassignment.assignment.model.CartDetail;
+import com.finalassignment.assignment.model.OrderDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +17,11 @@ public class ItemDto {
     private int price;
     private Set<CartDetailDto> cartDetailsDto;
     private Set<OrderDetailDto> orderDetailsDto;
+
+    public void setCartDetailsDto(Set<CartDetail> cartDetails) {
+    }
+
+    public void setOrderDetailsDto(Set<OrderDetail> orderDetails) {
+    }
 }
+

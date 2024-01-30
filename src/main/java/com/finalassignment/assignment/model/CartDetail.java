@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,15 +22,15 @@ import java.util.Date;
 @Table(name = "cart_details")
 public class CartDetail {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "item_id")
     private Item item;
 
     @Column(name = "quantity")

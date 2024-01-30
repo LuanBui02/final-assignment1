@@ -1,12 +1,12 @@
 CREATE TABLE carts
 (
-    id          number,
+    id          number GENERATED ALWAYS AS IDENTITY NOT NULL,
     customer_id number,
     PRIMARY KEY (id)
 );
 CREATE TABLE customers
 (
-    id       number,
+    id       number GENERATED ALWAYS AS IDENTITY NOT NULL,
     username varchar(255) not null,
     password varchar(255) not null,
     type     varchar(50),
@@ -14,7 +14,7 @@ CREATE TABLE customers
 );
 CREATE TABLE cart_details
 (
-    id         number,
+    id         number GENERATED ALWAYS AS IDENTITY NOT NULL,
     cart_id    number,
     item_id    number,
     quantity   number,
@@ -24,7 +24,7 @@ CREATE TABLE cart_details
 
 CREATE TABLE items
 (
-    id    number,
+    id    number GENERATED ALWAYS AS IDENTITY NOT NULL ,
     name  varchar(255),
     price number,
     PRIMARY KEY (id)
@@ -32,7 +32,7 @@ CREATE TABLE items
 
 CREATE TABLE order_details
 (
-    id       number,
+    id       number GENERATED ALWAYS AS IDENTITY NOT NULL,
     order_id number,
     item_id  number,
     quantity number,
@@ -41,7 +41,7 @@ CREATE TABLE order_details
 
 CREATE TABLE orders
 (
-    id          number,
+    id          number GENERATED ALWAYS AS IDENTITY NOT NULL,
     customer_id number,
     order_date  date,
     is_complete number(1),
@@ -66,3 +66,4 @@ ALTER TABLE order_details
 ALTER TABLE order_details
     ADD CONSTRAINT FK_OrderId
         FOREIGN KEY (order_id) REFERENCES orders (id);
+

@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,7 +21,7 @@ import java.util.Set;
 @Table(name = "items")
 public class Item {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
@@ -29,9 +30,9 @@ public class Item {
     @Column(name = "price")
     private int price;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartDetail> cartDetails;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderDetail> orderDetails;
 }
