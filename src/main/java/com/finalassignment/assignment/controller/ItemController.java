@@ -33,8 +33,8 @@ public class ItemController {
 
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable int id) {
+    @DeleteMapping("/{itemId}")
+    public void deleteItem(@PathVariable int itemId) {
 
     }
 }
