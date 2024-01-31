@@ -1,6 +1,6 @@
 package com.finalassignment.assignment.controller;
 
-import com.finalassignment.assignment.model.Item;
+import com.finalassignment.assignment.dto.ItemDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +24,12 @@ public class ItemController {
     }
 
     @PostMapping()
-    public void addItems(@RequestBody Item item) {
+    public void addItems(@RequestBody ItemDto itemDto) {
 
     }
 
     @PutMapping()
-    public void updateItem(@RequestBody Item itemEntity) {
+    public void updateItem(@RequestBody ItemDto itemDto) {
 
     }
 

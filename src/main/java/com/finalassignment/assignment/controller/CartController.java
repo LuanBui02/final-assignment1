@@ -1,6 +1,6 @@
 package com.finalassignment.assignment.controller;
 
-import com.finalassignment.assignment.model.Cart;
+import com.finalassignment.assignment.dto.CartDto;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,7 @@ public class CartController {
     }
 
     @PostMapping()
-    public void addItemToCart(@RequestBody Cart cart) {
+    public void addItemToCart(@RequestBody CartDto cartDto) {
 
     }
 

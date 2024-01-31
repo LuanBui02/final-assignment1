@@ -1,6 +1,6 @@
 package com.finalassignment.assignment.controller;
 
-import com.finalassignment.assignment.model.Customer;
+import com.finalassignment.assignment.dto.CustomerDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ public class OrderController {
     }
 
     @PostMapping()
-    public void createOrder(@RequestBody Customer customer) {
+    public void createOrder(@RequestBody CustomerDto customerDto) {
 
     }
 
