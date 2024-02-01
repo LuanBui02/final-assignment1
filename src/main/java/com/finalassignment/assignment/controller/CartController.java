@@ -22,7 +22,7 @@ public class CartController {
 
     @GetMapping("/{customerId}")
     public List<CartDto> getCartByCustomer(@PathVariable int customerId) {
-        return cartService.showCart();
+        return cartService.showCart(customerId);
     }
 
     @PostMapping()
@@ -37,7 +37,7 @@ public class CartController {
 
     @DeleteMapping("/{cartDetailId}")
     public void deleteItemFromCart(@PathVariable int cartDetailId) {
-        cartService.deleteItemFromCart();
+        cartService.deleteItemFromCart(cartDetailId);
     }
 }
 
