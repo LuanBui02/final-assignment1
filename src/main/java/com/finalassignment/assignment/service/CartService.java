@@ -8,6 +8,8 @@ public interface CartService {
     List<CartDto> showCart();
 
     void addItemToCart(CartDto cartDto);
+
     void updateItemInCart();
+
     void deleteItemFromCart();
 }
