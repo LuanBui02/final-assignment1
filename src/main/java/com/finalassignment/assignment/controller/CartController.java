@@ -13,19 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
-
     @GetMapping("/{customerId}")
     public void getCartByCustomer(@PathVariable int customerId) {
 
     }
 
     @PostMapping()
-    public void addItemToCart(@RequestBody CartDto cartDto) {
+    public void addNewItemToCart(@RequestBody CartDto cartDto) {
 
     }
 
     @PutMapping()
-    public void updateItemInCart() {
+    public void updateNewItemInCart() {
 
     }
 

@@ -24,7 +24,7 @@ public class ItemController {
     }
 
     @PostMapping()
-    public void addItems(@RequestBody ItemDto itemDto) {
+    public void addNewItems(@RequestBody ItemDto itemDto) {
 
     }
 
