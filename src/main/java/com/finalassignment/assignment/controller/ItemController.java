@@ -1,6 +1,8 @@
 package com.finalassignment.assignment.controller;
 
 import com.finalassignment.assignment.dto.ItemDto;
+import com.finalassignment.assignment.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,31 +12,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/items")
 public class ItemController {
-    @GetMapping()
-    public void getAllItems() {
+    @Autowired
+    private ItemService itemService;
 
+    @GetMapping()
+    public List<ItemDto> getAllItems() {
+        return itemService.showAllItem();
     }
 
     @GetMapping("/{itemId}")
-    public void getItemById(@PathVariable int itemId) {
-
+    public ItemDto getItemById(@PathVariable int itemId) {
+        return itemService.showItemById(itemId);
     }
 
     @PostMapping()
     public void addNewItems(@RequestBody ItemDto itemDto) {
-
+        itemService.addItems(itemDto);
     }
 
     @PutMapping()
     public void updateItem(@RequestBody ItemDto itemDto) {
-
+        itemService.updateItem(itemDto);
     }
 
     @DeleteMapping("/{itemId}")
     public void deleteItem(@PathVariable int itemId) {
-
+        itemService.deleteItems(itemId);
     }
 }

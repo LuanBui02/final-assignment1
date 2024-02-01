@@ -1,6 +1,8 @@
 package com.finalassignment.assignment.controller;
 
 import com.finalassignment.assignment.dto.CartDto;
+import com.finalassignment.assignment.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,27 +12,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/carts")
 public class CartController {
-    @GetMapping("/{customerId}")
-    public void getCartByCustomer(@PathVariable int customerId) {
+    @Autowired
+    private CartService cartService;
 
+    @GetMapping("/{customerId}")
+    public List<CartDto> getCartByCustomer(@PathVariable int customerId) {
+        return cartService.showCart();
     }
 
     @PostMapping()
     public void addNewItemToCart(@RequestBody CartDto cartDto) {
-
+        cartService.addItemToCart(cartDto);
     }
 
     @PutMapping()
     public void updateNewItemInCart() {
-
+        cartService.updateItemInCart();
     }
 
     @DeleteMapping("/{cartDetailId}")
     public void deleteItemFromCart(@PathVariable int cartDetailId) {
-
+        cartService.deleteItemFromCart();
     }
 }
 

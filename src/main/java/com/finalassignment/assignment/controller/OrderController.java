@@ -1,7 +1,8 @@
 package com.finalassignment.assignment.controller;
 
-import com.finalassignment.assignment.dto.CustomerDto;
 import com.finalassignment.assignment.dto.OrderDto;
+import com.finalassignment.assignment.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,18 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    @GetMapping("/{customerId}")
-    public void getOrderOfCustomer(@PathVariable int customerId) {
+    @Autowired
+    private OrderService orderService;
 
+    @GetMapping("/{customerId}")
+    public OrderDto getOrderOfCustomer(@PathVariable int customerId) {
+        return orderService.showOrder(customerId);
     }
 
     @PostMapping()
     public void createOrder(@RequestBody OrderDto orderDto) {
-
+        orderService.addOrder(orderDto);
     }
 
     @GetMapping("/latestOrder/{customerId}")
-    public void getOrderLatest(@PathVariable int customerId) {
-
+    public OrderDto getOrderLatest(@PathVariable int customerId) {
+        return orderService.showOrderLatest(customerId);
     }
 }
