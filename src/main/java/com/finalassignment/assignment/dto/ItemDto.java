@@ -1,12 +1,10 @@
 package com.finalassignment.assignment.dto;
 
-import com.finalassignment.assignment.model.CartDetail;
-import com.finalassignment.assignment.model.OrderDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,13 +13,8 @@ public class ItemDto {
     private int id;
     private String name;
     private int price;
-    private Set<CartDetailDto> cartDetailsDto;
-    private Set<OrderDetailDto> orderDetailsDto;
+    private List<CartDetailDto> cartDetailsDto;
+    private List<OrderDetailDto> orderDetailsDto;
 
-    public void setCartDetailsDto(Set<CartDetail> cartDetails) {
-    }
-
-    public void setOrderDetailsDto(Set<OrderDetail> orderDetails) {
-    }
 }
 
