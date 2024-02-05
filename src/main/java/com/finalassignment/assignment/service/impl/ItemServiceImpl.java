@@ -1,15 +1,9 @@
 package com.finalassignment.assignment.service.impl;
 
-import com.finalassignment.assignment.dto.CartDetailDto;
 import com.finalassignment.assignment.dto.ItemDto;
-import com.finalassignment.assignment.dto.OrderDetailDto;
 import com.finalassignment.assignment.exception.ItemNotFoundException;
-import com.finalassignment.assignment.mapper.CartDetailMapper;
 import com.finalassignment.assignment.mapper.ItemMapper;
-import com.finalassignment.assignment.mapper.OrderDetailMapper;
-import com.finalassignment.assignment.model.CartDetail;
 import com.finalassignment.assignment.model.Item;
-import com.finalassignment.assignment.model.OrderDetail;
 import com.finalassignment.assignment.repository.ItemRepo;
 import com.finalassignment.assignment.service.ItemService;
 import org.mapstruct.factory.Mappers;
@@ -24,9 +18,6 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
     @Autowired
     private ItemRepo itemRepo;
-
-    private final CartDetailMapper cartDetailMapper = Mappers.getMapper(CartDetailMapper.class);
-    private final OrderDetailMapper orderDetailMapper = Mappers.getMapper(OrderDetailMapper.class);
     private final ItemMapper itemMapper = Mappers.getMapper(ItemMapper.class);
 
     @Override
@@ -37,41 +28,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Optional<Item> showItemById(int itemId) {
-        if (itemRepo.findById(itemId).isEmpty()) {
+        Optional<Item> itemById = itemRepo.findById(itemId);
+
+        if (itemById.isEmpty()) {
             throw new ItemNotFoundException(itemId);
         }
-        return itemRepo.findById(itemId);
+        return itemById;
     }
 
     @Override
     public void addItems(ItemDto itemDto) {
-        Item item = new Item();
-        item.setId(itemDto.getId());
-        item.setName(itemDto.getName());
-        item.setPrice(itemDto.getPrice());
-
-        List<CartDetailDto> cartDetailDto = itemDto.getCartDetailsDto();
-        List<CartDetail> cartDetails = cartDetailMapper.toListModel(cartDetailDto);
-        item.setCartDetails(cartDetails);
-
-        List<OrderDetailDto> orderDetailDto = itemDto.getOrderDetailsDto();
-        List<OrderDetail> orderDetails = orderDetailMapper.toListModel(orderDetailDto);
-        item.setOrderDetails(orderDetails);
-
-        itemRepo.save(item);
+        itemRepo.save(itemMapper.toModel(itemDto));
     }
 
     @Override
     public void updateItem(ItemDto itemDto) {
-        if (itemRepo.findById(itemDto.getId()).isPresent()) {
-            Item item = itemRepo.findById(itemDto.getId()).get();
-            item.setPrice(itemDto.getPrice());
-            item.setName(itemDto.getName());
-
-            itemRepo.save(item);
-        } else {
+        Optional<Item> item = itemRepo.findById(itemDto.getId());
+        if (item.isEmpty()) {
             throw new ItemNotFoundException(itemDto.getId());
         }
+        itemRepo.save(itemMapper.toModel(itemDto));
     }
 
     @Override
