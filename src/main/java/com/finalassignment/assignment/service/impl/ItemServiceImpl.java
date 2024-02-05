@@ -5,6 +5,7 @@ import com.finalassignment.assignment.dto.ItemDto;
 import com.finalassignment.assignment.dto.OrderDetailDto;
 import com.finalassignment.assignment.exception.ItemNotFoundException;
 import com.finalassignment.assignment.mapper.CartDetailMapper;
+import com.finalassignment.assignment.mapper.ItemMapper;
 import com.finalassignment.assignment.mapper.OrderDetailMapper;
 import com.finalassignment.assignment.model.CartDetail;
 import com.finalassignment.assignment.model.Item;
@@ -15,7 +16,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,26 +27,12 @@ public class ItemServiceImpl implements ItemService {
 
     private final CartDetailMapper cartDetailMapper = Mappers.getMapper(CartDetailMapper.class);
     private final OrderDetailMapper orderDetailMapper = Mappers.getMapper(OrderDetailMapper.class);
+    private final ItemMapper itemMapper = Mappers.getMapper(ItemMapper.class);
 
     @Override
     public List<ItemDto> showAllItem() {
-        return itemRepo.findAll().stream().map(item -> {
-            ItemDto itemDto = new ItemDto();
-            itemDto.setId(item.getId());
-            itemDto.setName(item.getName());
-            itemDto.setPrice(item.getPrice());
-
-
-            List<CartDetail> cartDetailDto = item.getCartDetails();
-            List<CartDetailDto> cartDetails = cartDetailMapper.toListDto(cartDetailDto);
-            itemDto.setCartDetailsDto(cartDetails);
-
-            List<OrderDetail> orderDetails = item.getOrderDetails();
-            List<OrderDetailDto> orderDetailDto = orderDetailMapper.toListDto(orderDetails);
-
-            itemDto.setOrderDetailsDto(orderDetailDto);
-            return itemDto;
-        }).sorted(Comparator.comparing(ItemDto::getId)).collect(Collectors.toList());
+        List<Item> list = itemRepo.findAll();
+        return list.stream().map(itemMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
