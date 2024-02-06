@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +14,6 @@ public class CustomerDto {
     private String username;
     private String password;
     private String type;
-    private Set<CartDto> cartsDto;
-    private Set<OrderDto> ordersDto;
+    private List<CartDto> cartsDto;
+    private List<OrderDto> ordersDto;
 }

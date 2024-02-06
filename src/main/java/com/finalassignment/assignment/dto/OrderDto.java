@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +19,5 @@ public class OrderDto {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date orderDate;
     private boolean isComplete;
-    private Set<OrderDetailDto> orderDetailsDto;
+    private List<OrderDetailDto> orderDetailsDto;
 }
