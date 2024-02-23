@@ -18,4 +18,19 @@ public class HandleException {
         ErrorMessage error = new ErrorMessage("Error: 1", "There is no item found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleCustomerEmpty(CustomerNotFoundException customerNotFoundException) {
+        ErrorMessage error = new ErrorMessage("Error: 2", customerNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    @ExceptionHandler(CartNotFoundByIdException.class)
+    public ResponseEntity<ErrorMessage> handleCart(CartNotFoundByIdException cartNotFoundByIdException) {
+        ErrorMessage error = new ErrorMessage("Error: 3", cartNotFoundByIdException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    @ExceptionHandler(NotFoundCartDetailByIdException.class)
+    public ResponseEntity<ErrorMessage> handleCartDetail(NotFoundCartDetailByIdException notFoundCartDetailByIdException) {
+        ErrorMessage error = new ErrorMessage("Error: 4", notFoundCartDetailByIdException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
