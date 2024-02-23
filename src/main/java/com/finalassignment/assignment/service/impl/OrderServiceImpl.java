@@ -3,6 +3,7 @@ package com.finalassignment.assignment.service.impl;
 import com.finalassignment.assignment.dto.OrderCustomerDto;
 import com.finalassignment.assignment.dto.OrderDto;
 import com.finalassignment.assignment.exception.CustomerNotFoundException;
+import com.finalassignment.assignment.exception.OrderNotFoundException;
 import com.finalassignment.assignment.mapper.OrderMapper;
 import com.finalassignment.assignment.model.Cart;
 import com.finalassignment.assignment.model.CartDetail;
@@ -56,10 +57,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> showOrderDto(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
-        if (customerOptional.isEmpty()) {
+        Optional<Order> orderOptional = orderRepo.findById(customerId);
+        if (orderOptional.isEmpty()) {
             String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
             logger.error("CustomerNotFound: {}", customerNotFound);
-            throw new CustomerNotFoundException(customerId);
+            throw new OrderNotFoundException(customerId);
+        } else {
+            if (customerOptional.isEmpty()) {
+                String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
+                logger.error("CustomerNotFound: {}", customerNotFound);
+                throw new CustomerNotFoundException(customerId);
+            }
         }
         String orderFound = messageSource.getMessage("OrderFound", null, Locale.ENGLISH);
         logger.info("OrderFound: {}", orderFound);
@@ -107,11 +115,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto showOrderLatest(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
-
-        if (customerOptional.isEmpty()) {
+        Optional<Order> orderOptional = orderRepo.findById(customerId);
+        if (orderOptional.isEmpty()) {
             String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
             logger.error("CustomerNotFound: {}", customerNotFound);
-            throw new CustomerNotFoundException(customerId);
+            throw new OrderNotFoundException(customerId);
+        } else {
+            if (customerOptional.isEmpty()) {
+                String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
+                logger.error("CustomerNotFound: {}", customerNotFound);
+                throw new CustomerNotFoundException(customerId);
+            }
         }
         String orderFound = messageSource.getMessage("OrderFound", null, Locale.ENGLISH);
         logger.info("OrderFound: {}", orderFound);
