@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Add new item",
+			"name": "Item | addItem",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -36,7 +36,7 @@
 			"response": []
 		},
 		{
-			"name": "Get-item-by-id",
+			"name": "Item | Get Item By Id",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -57,7 +57,7 @@
 			"response": []
 		},
 		{
-			"name": "Get-all-items",
+			"name": "Item | Get All Items",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -77,7 +77,7 @@
 			"response": []
 		},
 		{
-			"name": "Update-item",
+			"name": "Item | Updated Item",
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -106,7 +106,7 @@
 			"response": []
 		},
 		{
-			"name": "Delete-Item",
+			"name": "Item | Delete Item",
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -127,7 +127,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/carts",
+			"name": "Cart | Add Item to Cart",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -163,7 +163,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/carts/1",
+			"name": "Cart | Get Cart by CustomerId",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -184,7 +184,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/carts",
+			"name": "Cart | Updated Item in Cart",
 			"request": {
 				"method": "PUT",
 				"header": [],
@@ -213,7 +213,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/carts/1",
+			"name": "Cart | Delete Cart by CartDetail",
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -234,7 +234,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/orders/1",
+			"name": "Order | Get All Order for Customer",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -255,7 +255,7 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/orders",
+			"name": "Order | Add Order for Customer",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -284,18 +284,19 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:8080/orders/latestOrder/1",
+			"name": "Order | Get latest Order of Customer",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/orders/latestOrder/1",
+					"raw": "http://localhost:8080/api/orders/latestOrder/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"orders",
 						"latestOrder",
 						"1"
