@@ -30,9 +30,9 @@ public class Item {
     @Column(name = "price")
     private int price;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<CartDetail> cartDetails;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 }
