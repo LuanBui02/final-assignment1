@@ -33,4 +33,9 @@ public class HandleException {
         ErrorMessage error = new ErrorMessage("Error: 4", notFoundCartDetailByIdException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<ErrorMessage> handleOrderNotFound(OrderNotFoundException orderNotFoundException) {
+        ErrorMessage error = new ErrorMessage("Error: 5", orderNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 }
