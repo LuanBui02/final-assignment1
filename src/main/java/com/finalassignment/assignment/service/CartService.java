@@ -1,15 +1,18 @@
 package com.finalassignment.assignment.service;
 
 import com.finalassignment.assignment.dto.CartDto;
+import com.finalassignment.assignment.dto.CartItemDto;
 
 import java.util.List;
 
 public interface CartService {
-    List<CartDto> showCart(int customerId);
+    CartDto showCartDto(int customerId);
 
-    void addItemToCart(CartDto cartDto);
+    CartDto addItemToCart(CartItemDto cartItemDto);
 
-    void updateItemInCart();
+    void updateItemInCart(CartItemDto cartItemDto);
 
     void deleteItemFromCart(int cartDetailId);
+
+    List<CartDto> showAllCart();
 }

@@ -1,11 +1,16 @@
 package com.finalassignment.assignment.service;
 
+import com.finalassignment.assignment.dto.OrderCustomerDto;
 import com.finalassignment.assignment.dto.OrderDto;
 
-public interface OrderService {
-    OrderDto showOrder(int customerId);
+import java.util.List;
 
-    void addOrder(OrderDto orderDto);
+public interface OrderService {
+    List<OrderDto> showOrderDto(int customerId);
+
+    void addOrder(OrderCustomerDto orderCustomerDto);
 
     OrderDto showOrderLatest(int customerId);
+
+    void deleteOrder(int orderId);
 }
