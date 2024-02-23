@@ -66,4 +66,3 @@ ALTER TABLE order_details
 ALTER TABLE order_details
     ADD CONSTRAINT FK_OrderId
         FOREIGN KEY (order_id) REFERENCES orders (id);
-
