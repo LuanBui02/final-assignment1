@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
             logger.error("ItemNotFound: {}", Constant.itemNotFound);
             throw new ItemNotFoundException();
         }
-        logger.info("ItemFound: {}", Constant.finalItemFound);
+        logger.info("ItemFound: {}", Constant.itemFound);
         return list.stream().map(ItemMapper.INSTANCE::toDto).collect(Collectors.toList());
 
     }

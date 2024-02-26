@@ -71,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> showOrderDto(int customerId) {
         checkCustomerEmpty(customerId);
         checkOrderEmpty(customerId);
+        logger.info("OrderFound: {}", Constant.orderFound);
         return OrderMapper.INSTANCE.toListDto(showOrder(customerId));
     }
 
@@ -113,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto showOrderLatest(int customerId) {
         checkOrderEmpty(customerId);
         checkCustomerEmpty(customerId);
+        logger.info("OrderFound: {}", Constant.orderFound);
         return OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
     }
 

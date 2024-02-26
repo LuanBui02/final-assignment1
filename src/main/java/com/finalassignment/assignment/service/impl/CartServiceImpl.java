@@ -20,7 +20,6 @@ import com.finalassignment.assignment.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -39,8 +38,6 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CartDetailRepo cartDetailRepo;
     private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
-    @Autowired
-    private MessageSource messageSource;
 
     private Cart showCart(int customerId) {
         Optional<Customer> customer = customerRepo.findById(customerId);
@@ -89,10 +86,10 @@ public class CartServiceImpl implements CartService {
     public CartDto showCartDto(int customerId) {
         Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(customerId);
         if (cartOptional.isEmpty()) {
-            logger.error("CartNotFoundById: {}", Constant.finalCartNotFoundById);
+            logger.error("CartNotFoundById: {}", Constant.cardNotFoundById);
             throw new CartNotFoundByIdException(customerId);
         }
-        logger.info("CartFound: {}", Constant.finalCartFound);
+        logger.info("CartFound: {}", Constant.cartFound);
         return CartMapper.INSTANCE.toDto(showCart(customerId));
     }
 
