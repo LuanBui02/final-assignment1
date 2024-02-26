@@ -16,16 +16,15 @@ import com.finalassignment.assignment.repository.CustomerRepo;
 import com.finalassignment.assignment.repository.OrderDetailRepo;
 import com.finalassignment.assignment.repository.OrderRepo;
 import com.finalassignment.assignment.service.OrderService;
+import com.finalassignment.assignment.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -40,8 +39,6 @@ public class OrderServiceImpl implements OrderService {
     private CartRepo cartRepo;
     @Autowired
     private CartDetailRepo cartDetailRepo;
-    @Autowired
-    private MessageSource messageSource;
     private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
     private List<Order> showOrder(int customerId) {
@@ -54,23 +51,26 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
+    private void checkOrderEmpty(int orderId) {
+        List<Order> orderOptional = orderRepo.findListOrderByCustomerId(orderId);
+        if (orderOptional.isEmpty()) {
+            logger.error("CustomerNotFound: {}", Constant.customerNotFound);
+            throw new OrderNotFoundException(orderId);
+        }
+    }
+
+    private void checkCustomerEmpty(int customerId) {
+        Optional<Customer> customerOptional = customerRepo.findById(customerId);
+        if (customerOptional.isEmpty()) {
+            logger.error("CustomerNotFound: {}", Constant.customerNotFound);
+            throw new CustomerNotFoundException(customerId);
+        }
+    }
+
     @Override
     public List<OrderDto> showOrderDto(int customerId) {
-        Optional<Customer> customerOptional = customerRepo.findById(customerId);
-        Optional<Order> orderOptional = orderRepo.findById(customerId);
-        if (orderOptional.isEmpty()) {
-            String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-            logger.error("CustomerNotFound: {}", customerNotFound);
-            throw new OrderNotFoundException(customerId);
-        } else {
-            if (customerOptional.isEmpty()) {
-                String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-                logger.error("CustomerNotFound: {}", customerNotFound);
-                throw new CustomerNotFoundException(customerId);
-            }
-        }
-        String orderFound = messageSource.getMessage("OrderFound", null, Locale.ENGLISH);
-        logger.info("OrderFound: {}", orderFound);
+        checkCustomerEmpty(customerId);
+        checkOrderEmpty(customerId);
         return OrderMapper.INSTANCE.toListDto(showOrder(customerId));
     }
 
@@ -103,32 +103,16 @@ public class OrderServiceImpl implements OrderService {
             }
             order = orderRepo.findTopByCustomerIdOrderByOrderDateDesc(orderCustomerDto.getCustomerId());
         } else {
-            String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-            logger.info("CustomerNotFound: {}", customerNotFound);
-            throw new CustomerNotFoundException(orderCustomerDto.getCustomerId());
+            checkCustomerEmpty(orderCustomerDto.getCustomerId());
         }
-        String orderAdded = messageSource.getMessage("OrderAdded", null, Locale.ENGLISH);
-        logger.info("OrderAdded: {}", orderAdded);
+        logger.info("OrderAdded: {}", Constant.orderAdded);
         OrderMapper.INSTANCE.toDto(order);
     }
 
     @Override
     public OrderDto showOrderLatest(int customerId) {
-        Optional<Customer> customerOptional = customerRepo.findById(customerId);
-        Optional<Order> orderOptional = orderRepo.findById(customerId);
-        if (orderOptional.isEmpty()) {
-            String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-            logger.error("CustomerNotFound: {}", customerNotFound);
-            throw new OrderNotFoundException(customerId);
-        } else {
-            if (customerOptional.isEmpty()) {
-                String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-                logger.error("CustomerNotFound: {}", customerNotFound);
-                throw new CustomerNotFoundException(customerId);
-            }
-        }
-        String orderFound = messageSource.getMessage("OrderFound", null, Locale.ENGLISH);
-        logger.info("OrderFound: {}", orderFound);
+        checkOrderEmpty(customerId);
+        checkCustomerEmpty(customerId);
         return OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
     }
 

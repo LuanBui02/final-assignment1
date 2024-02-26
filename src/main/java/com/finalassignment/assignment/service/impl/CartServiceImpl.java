@@ -16,6 +16,7 @@ import com.finalassignment.assignment.repository.CartRepo;
 import com.finalassignment.assignment.repository.CustomerRepo;
 import com.finalassignment.assignment.repository.ItemRepo;
 import com.finalassignment.assignment.service.CartService;
+import com.finalassignment.assignment.util.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -61,16 +61,38 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    private void checkCustomerEmpty(int customerId) {
+        Optional<Customer> customerOptional = customerRepo.findById(customerId);
+        if (customerOptional.isEmpty()) {
+            logger.error("CustomerNotFound: {}", Constant.customerNotFound);
+            throw new CustomerNotFoundException(customerId);
+        }
+    }
+
+    private void checkItemEmpty(int itemId) {
+        Optional<Item> itemOptional = itemRepo.findById(itemId);
+        if (itemOptional.isEmpty()) {
+            logger.error("ItemNotFound: {}", Constant.itemNotFound);
+            throw new ItemNotFoundException();
+        }
+    }
+
+    private void checkCartDetailEmpty(int cartDetailId) {
+        Optional<CartDetail> cartDetailOptional = cartDetailRepo.findById(cartDetailId);
+        if (cartDetailOptional.isEmpty()) {
+            logger.error("CartDetailNotFound: {}", Constant.cartDetailNotFound);
+            throw new NotFoundCartDetailByIdException();
+        }
+    }
+
     @Override
     public CartDto showCartDto(int customerId) {
         Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(customerId);
         if (cartOptional.isEmpty()) {
-            String cartNotFoundById = messageSource.getMessage("CartNotFoundById", null, Locale.ENGLISH);
-            logger.error("CartNotFoundById: {}", cartNotFoundById);
+            logger.error("CartNotFoundById: {}", Constant.finalCartNotFoundById);
             throw new CartNotFoundByIdException(customerId);
         }
-        String cartFound = messageSource.getMessage("CartFound", null, Locale.ENGLISH);
-        logger.info("CartFound: {}", cartFound);
+        logger.info("CartFound: {}", Constant.finalCartFound);
         return CartMapper.INSTANCE.toDto(showCart(customerId));
     }
 
@@ -80,7 +102,6 @@ public class CartServiceImpl implements CartService {
 
         Optional<Item> itemOptional = itemRepo.findById(cartItemDto.getItemId());
 
-        Optional<Customer> customerOptional = customerRepo.findById(cartItemDto.getCustomerId());
         if (itemOptional.isPresent()) {
             Item item = itemOptional.get();
             CartDetail cartDetail = new CartDetail();
@@ -91,18 +112,11 @@ public class CartServiceImpl implements CartService {
             cartDetailRepo.save(cartDetail);
 
         } else {
-            String itemNotFound = messageSource.getMessage("ItemNotFound", null, Locale.ENGLISH);
-            logger.error("ItemNotFound: {}", itemNotFound);
-            throw new ItemNotFoundException();
+            checkItemEmpty(cartItemDto.getItemId());
         }
-        if (customerOptional.isEmpty()) {
-            String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-            logger.error("CustomerNotFound: {}", customerNotFound);
-            throw new CustomerNotFoundException(cartItemDto.getCustomerId());
-        }
-        String cartAdded = messageSource.getMessage("CartAdded", null, Locale.ENGLISH);
-        logger.info("CartAdded: {}", cartAdded);
-        return showCartDto(cartItemDto.getCustomerId());
+        checkCustomerEmpty(cartItemDto.getCustomerId());
+        logger.info("CartAdded: {}", Constant.cartAdded);
+        return CartMapper.INSTANCE.toDto(showCart(cartItemDto.getCustomerId()));
     }
 
     @Override
@@ -122,34 +136,21 @@ public class CartServiceImpl implements CartService {
                     cartDetail.setDateAdded(new Date());
                     cartDetailRepo.save(cartDetail);
                 } else {
-                    String customerNotFound = messageSource.getMessage("CustomerNotFound", null, Locale.ENGLISH);
-                    logger.error("CustomerNotFound: {}", customerNotFound);
-                    throw new CustomerNotFoundException(cartItemDto.getCustomerId());
+                    checkCustomerEmpty(cartItemDto.getCustomerId());
                 }
-                String itemUpdated = messageSource.getMessage("ItemUpdated", null, Locale.ENGLISH);
-                logger.info("ItemUpdated: {}", itemUpdated);
+                logger.info("ItemUpdated: {}", Constant.itemUpdated);
             } else {
-                String itemNotFound = messageSource.getMessage("ItemNotFound", null, Locale.ENGLISH);
-                logger.error("ItemNotFound: {}", itemNotFound);
-                throw new ItemNotFoundException();
+                checkItemEmpty(cartItemDto.getItemId());
             }
         } else {
-            String cartDetailNotFound = messageSource.getMessage("CartDetailNotFound", null, Locale.ENGLISH);
-            logger.error("CartDetailNotFound: {}", cartDetailNotFound);
-            throw new NotFoundCartDetailByIdException();
+            checkCartDetailEmpty(cartItemDto.getId());
         }
     }
 
     @Override
     public void deleteItemFromCart(int cartDetailId) {
-        Optional<CartDetail> CartDetailOptional = cartDetailRepo.findById(cartDetailId);
-        if (CartDetailOptional.isEmpty()) {
-            String cartDetailNotFound = messageSource.getMessage("CartDetailNotFound", null, Locale.ENGLISH);
-            logger.error("CartDetailNotFound: {}", cartDetailNotFound);
-            throw new NotFoundCartDetailByIdException();
-        }
-        String itemDeleted = messageSource.getMessage("ItemDeleted", null, Locale.ENGLISH);
-        logger.info("ItemDeleted: {}", itemDeleted);
+        checkCartDetailEmpty(cartDetailId);
+        logger.info("ItemDeleted: {}", Constant.itemDeleted);
         cartDetailRepo.deleteById(cartDetailId);
     }
 
