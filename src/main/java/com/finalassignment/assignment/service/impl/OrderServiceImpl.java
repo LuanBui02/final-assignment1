@@ -54,7 +54,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     private void checkOrderEmpty(int orderId) {
         List<Order> orderOptional = orderRepo.findListOrderByCustomerId(orderId);
         if (orderOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", getCustomerNotFound("CustomerNotFound"));
+            logger.error("CustomerNotFound: {}", getMessage("CustomerNotFound"));
             throw new OrderNotFoundException(orderId);
         }
     }
@@ -62,7 +62,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     private void checkCustomerEmpty(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
         if (customerOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", getCustomerNotFound("CustomerNotFound"));
+            logger.error("CustomerNotFound: {}", getMessage("CustomerNotFound"));
             throw new CustomerNotFoundException(customerId);
         }
     }
@@ -71,7 +71,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     public List<OrderDto> showOrderDto(int customerId) {
         checkCustomerEmpty(customerId);
         checkOrderEmpty(customerId);
-        logger.info("OrderFound: {}", getOrderFound("OrderFound"));
+        logger.info("OrderFound: {}", getMessage("OrderFound"));
         return OrderMapper.INSTANCE.toListDto(showOrder(customerId));
     }
 
@@ -106,7 +106,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
         } else {
             checkCustomerEmpty(orderCustomerDto.getCustomerId());
         }
-        logger.info("OrderAdded: {}", getOrderAdded("OrderAdded"));
+        logger.info("OrderAdded: {}", getMessage("OrderAdded"));
         OrderMapper.INSTANCE.toDto(order);
     }
 
@@ -114,12 +114,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     public OrderDto showOrderLatest(int customerId) {
         checkOrderEmpty(customerId);
         checkCustomerEmpty(customerId);
-        logger.info("OrderFound: {}", getOrderFound("OrderFound"));
+        logger.info("OrderFound: {}", getMessage("OrderFound"));
         return OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
-    }
-
-    @Override
-    public void deleteOrder(int orderId) {
-        orderRepo.deleteById(orderId);
     }
 }

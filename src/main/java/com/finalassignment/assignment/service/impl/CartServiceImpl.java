@@ -61,7 +61,7 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
     private void checkCustomerEmpty(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
         if (customerOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", getCustomerNotFound("CustomerNotFound"));
+            logger.error("CustomerNotFound: {}", getMessage("CustomerNotFound"));
             throw new CustomerNotFoundException(customerId);
         }
     }
@@ -69,7 +69,7 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
     private void checkItemEmpty(int itemId) {
         Optional<Item> itemOptional = itemRepo.findById(itemId);
         if (itemOptional.isEmpty()) {
-            logger.error("ItemNotFound: {}", getItemNotFound("ItemNotFound"));
+            logger.error("ItemNotFound: {}", getMessage("ItemNotFound"));
             throw new ItemNotFoundException();
         }
     }
@@ -77,7 +77,7 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
     private void checkCartDetailEmpty(int cartDetailId) {
         Optional<CartDetail> cartDetailOptional = cartDetailRepo.findById(cartDetailId);
         if (cartDetailOptional.isEmpty()) {
-            logger.error("CartDetailNotFound: {}", getCartDetailNotFound("CartDetailNotFound"));
+            logger.error("CartDetailNotFound: {}", getMessage("CartDetailNotFound"));
             throw new NotFoundCartDetailByIdException();
         }
     }
@@ -86,10 +86,10 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
     public CartDto showCartDto(int customerId) {
         Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(customerId);
         if (cartOptional.isEmpty()) {
-            logger.error("CartNotFoundById: {}", getCartNotFoundById("CartNotFoundById"));
+            logger.error("CartNotFoundById: {}", getMessage("CartNotFoundById"));
             throw new CartNotFoundByIdException(customerId);
         }
-        logger.info("CartFound: {}", getCartFound("CartFound"));
+        logger.info("CartFound: {}", getMessage("CartFound"));
         return CartMapper.INSTANCE.toDto(showCart(customerId));
     }
 
@@ -112,7 +112,7 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
             checkItemEmpty(cartItemDto.getItemId());
         }
         checkCustomerEmpty(cartItemDto.getCustomerId());
-        logger.info("CartAdded: {}", getCartAdded("CartAdded"));
+        logger.info("CartAdded: {}", getMessage("CartAdded"));
         return CartMapper.INSTANCE.toDto(showCart(cartItemDto.getCustomerId()));
     }
 
@@ -135,7 +135,7 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
                 } else {
                     checkCustomerEmpty(cartItemDto.getCustomerId());
                 }
-                logger.info("ItemUpdated: {}", getItemUpdated("ItemUpdated"));
+                logger.info("ItemUpdated: {}", getMessage("ItemUpdated"));
             } else {
                 checkItemEmpty(cartItemDto.getItemId());
             }
@@ -147,13 +147,7 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
     @Override
     public void deleteItemFromCart(int cartDetailId) {
         checkCartDetailEmpty(cartDetailId);
-        logger.info("ItemDeleted: {}", getItemDeleted("ItemDeleted"));
+        logger.info("ItemDeleted: {}", getMessage("ItemDeleted"));
         cartDetailRepo.deleteById(cartDetailId);
-    }
-
-    @Override
-    public List<CartDto> showAllCart() {
-        List<Cart> list = cartRepo.findAll();
-        return list.stream().map(CartMapper.INSTANCE::toDto).collect(Collectors.toList());
     }
 }
