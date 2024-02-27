@@ -11,6 +11,4 @@ public interface OrderService {
     void addOrder(OrderCustomerDto orderCustomerDto);
 
     OrderDto showOrderLatest(int customerId);
-
-    void deleteOrder(int orderId);
 }
