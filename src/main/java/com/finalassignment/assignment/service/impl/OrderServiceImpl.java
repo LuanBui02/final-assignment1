@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl extends Constant implements OrderService {
     @Autowired
     private CustomerRepo customerRepo;
     @Autowired
@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
     private void checkOrderEmpty(int orderId) {
         List<Order> orderOptional = orderRepo.findListOrderByCustomerId(orderId);
         if (orderOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", Constant.customerNotFound);
+            logger.error("CustomerNotFound: {}", getCustomerNotFound("CustomerNotFound"));
             throw new OrderNotFoundException(orderId);
         }
     }
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     private void checkCustomerEmpty(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
         if (customerOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", Constant.customerNotFound);
+            logger.error("CustomerNotFound: {}", getCustomerNotFound("CustomerNotFound"));
             throw new CustomerNotFoundException(customerId);
         }
     }
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderDto> showOrderDto(int customerId) {
         checkCustomerEmpty(customerId);
         checkOrderEmpty(customerId);
-        logger.info("OrderFound: {}", Constant.orderFound);
+        logger.info("OrderFound: {}", getOrderFound("OrderFound"));
         return OrderMapper.INSTANCE.toListDto(showOrder(customerId));
     }
 
@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
         } else {
             checkCustomerEmpty(orderCustomerDto.getCustomerId());
         }
-        logger.info("OrderAdded: {}", Constant.orderAdded);
+        logger.info("OrderAdded: {}", getOrderAdded("OrderAdded"));
         OrderMapper.INSTANCE.toDto(order);
     }
 
@@ -114,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto showOrderLatest(int customerId) {
         checkOrderEmpty(customerId);
         checkCustomerEmpty(customerId);
-        logger.info("OrderFound: {}", Constant.orderFound);
+        logger.info("OrderFound: {}", getOrderFound("OrderFound"));
         return OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
     }
 

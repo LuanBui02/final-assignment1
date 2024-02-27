@@ -21,55 +21,59 @@ import java.util.stream.Collectors;
 
 @Service
 @PropertySource("classpath:messages.properties")
-public class ItemServiceImpl implements ItemService {
+public class ItemServiceImpl extends Constant implements ItemService {
     @Autowired
     private ItemRepo itemRepo;
     private static final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
 
     private Optional<Item> findItemId(int itemId) {
         Optional<Item> itemById = itemRepo.findById(itemId);
-        if (itemById.isEmpty()) {
-            logger.error("ItemNotFoundById: {}", Constant.itemNotFoundById);
+        if (itemById.isPresent()) {
+            return itemById;
+        } else {
+            logger.error("ItemNotFoundById: {}", getItemNotFoundById("NotFoundItemById"));
             throw new ItemNotFoundByIdException(itemId);
         }
-        return itemById;
     }
 
     @Override
     public List<ItemDto> showAllItem() {
         List<Item> list = itemRepo.findAll();
         if (list.isEmpty()) {
-            logger.error("ItemNotFound: {}", Constant.itemNotFound);
+            logger.error("ItemNotFound: {}", getItemNotFound("ItemNotFound"));
             throw new ItemNotFoundException();
         }
-        logger.info("ItemFound: {}", Constant.itemFound);
+        logger.info("ItemFound: {}", getItemFound("ItemFound"));
         return list.stream().map(ItemMapper.INSTANCE::toDto).collect(Collectors.toList());
 
     }
 
     @Override
     public Optional<Item> showItemById(int itemId) {
-        logger.info("ItemFound: {}", Constant.itemFoundById);
-        return findItemId(itemId);
+        if (findItemId(itemId).isPresent()) {
+            logger.info("ItemFound: {}", getItemFound("ItemFound"));
+            return findItemId(itemId);
+        }
+        return Optional.empty();
     }
 
     @Override
     public void addItems(ItemDto itemDto) {
-        logger.info("ItemAdded: {}", Constant.itemAdded);
+        logger.info("ItemAdded: {}", getItemAdded("ItemAdded"));
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
     }
 
     @Override
     public void updateItem(ItemDto itemDto) {
         findItemId(itemDto.getId());
-        logger.info("ItemUpdated: {}", Constant.itemUpdated);
+        logger.info("ItemUpdated: {}", getItemUpdated("ItemUpdated"));
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
     }
 
     @Override
     public void deleteItems(int itemId) {
         findItemId(itemId);
-        logger.info("ItemDeleted: {}", Constant.itemDeleted);
+        logger.info("ItemDeleted: {}", getItemDeleted("ItemDeleted"));
         itemRepo.deleteById(itemId);
     }
 

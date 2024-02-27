@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CartServiceImpl implements CartService {
+public class CartServiceImpl extends Constant implements CartService {
     @Autowired
     private CustomerRepo customerRepo;
     @Autowired
@@ -61,7 +61,7 @@ public class CartServiceImpl implements CartService {
     private void checkCustomerEmpty(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
         if (customerOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", Constant.customerNotFound);
+            logger.error("CustomerNotFound: {}", getCustomerNotFound("CustomerNotFound"));
             throw new CustomerNotFoundException(customerId);
         }
     }
@@ -69,7 +69,7 @@ public class CartServiceImpl implements CartService {
     private void checkItemEmpty(int itemId) {
         Optional<Item> itemOptional = itemRepo.findById(itemId);
         if (itemOptional.isEmpty()) {
-            logger.error("ItemNotFound: {}", Constant.itemNotFound);
+            logger.error("ItemNotFound: {}", getItemNotFound("ItemNotFound"));
             throw new ItemNotFoundException();
         }
     }
@@ -77,7 +77,7 @@ public class CartServiceImpl implements CartService {
     private void checkCartDetailEmpty(int cartDetailId) {
         Optional<CartDetail> cartDetailOptional = cartDetailRepo.findById(cartDetailId);
         if (cartDetailOptional.isEmpty()) {
-            logger.error("CartDetailNotFound: {}", Constant.cartDetailNotFound);
+            logger.error("CartDetailNotFound: {}", getCartDetailNotFound("CartDetailNotFound"));
             throw new NotFoundCartDetailByIdException();
         }
     }
@@ -86,10 +86,10 @@ public class CartServiceImpl implements CartService {
     public CartDto showCartDto(int customerId) {
         Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(customerId);
         if (cartOptional.isEmpty()) {
-            logger.error("CartNotFoundById: {}", Constant.cardNotFoundById);
+            logger.error("CartNotFoundById: {}", getCartNotFoundById("CartNotFoundById"));
             throw new CartNotFoundByIdException(customerId);
         }
-        logger.info("CartFound: {}", Constant.cartFound);
+        logger.info("CartFound: {}", getCartFound("CartFound"));
         return CartMapper.INSTANCE.toDto(showCart(customerId));
     }
 
@@ -112,7 +112,7 @@ public class CartServiceImpl implements CartService {
             checkItemEmpty(cartItemDto.getItemId());
         }
         checkCustomerEmpty(cartItemDto.getCustomerId());
-        logger.info("CartAdded: {}", Constant.cartAdded);
+        logger.info("CartAdded: {}", getCartAdded("CartAdded"));
         return CartMapper.INSTANCE.toDto(showCart(cartItemDto.getCustomerId()));
     }
 
@@ -135,7 +135,7 @@ public class CartServiceImpl implements CartService {
                 } else {
                     checkCustomerEmpty(cartItemDto.getCustomerId());
                 }
-                logger.info("ItemUpdated: {}", Constant.itemUpdated);
+                logger.info("ItemUpdated: {}", getItemUpdated("ItemUpdated"));
             } else {
                 checkItemEmpty(cartItemDto.getItemId());
             }
@@ -147,7 +147,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteItemFromCart(int cartDetailId) {
         checkCartDetailEmpty(cartDetailId);
-        logger.info("ItemDeleted: {}", Constant.itemDeleted);
+        logger.info("ItemDeleted: {}", getItemDeleted("ItemDeleted"));
         cartDetailRepo.deleteById(cartDetailId);
     }
 
