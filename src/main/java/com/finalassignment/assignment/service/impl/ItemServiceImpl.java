@@ -7,7 +7,7 @@ import com.finalassignment.assignment.mapper.ItemMapper;
 import com.finalassignment.assignment.model.Item;
 import com.finalassignment.assignment.repository.ItemRepo;
 import com.finalassignment.assignment.service.ItemService;
-import com.finalassignment.assignment.util.Constant;
+import com.finalassignment.assignment.util.AbstractMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @PropertySource("classpath:messages.properties")
-public class ItemServiceImpl extends Constant implements ItemService {
+public class ItemServiceImpl extends AbstractMessage implements ItemService {
     @Autowired
     private ItemRepo itemRepo;
     private static final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);

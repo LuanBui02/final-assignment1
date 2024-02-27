@@ -16,7 +16,7 @@ import com.finalassignment.assignment.repository.CustomerRepo;
 import com.finalassignment.assignment.repository.OrderDetailRepo;
 import com.finalassignment.assignment.repository.OrderRepo;
 import com.finalassignment.assignment.service.OrderService;
-import com.finalassignment.assignment.util.Constant;
+import com.finalassignment.assignment.util.AbstractMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class OrderServiceImpl extends Constant implements OrderService {
+public class OrderServiceImpl extends AbstractMessage implements OrderService {
     @Autowired
     private CustomerRepo customerRepo;
     @Autowired

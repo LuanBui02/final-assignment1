@@ -16,7 +16,7 @@ import com.finalassignment.assignment.repository.CartRepo;
 import com.finalassignment.assignment.repository.CustomerRepo;
 import com.finalassignment.assignment.repository.ItemRepo;
 import com.finalassignment.assignment.service.CartService;
-import com.finalassignment.assignment.util.Constant;
+import com.finalassignment.assignment.util.AbstractMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class CartServiceImpl extends Constant implements CartService {
+public class CartServiceImpl extends AbstractMessage implements CartService {
     @Autowired
     private CustomerRepo customerRepo;
     @Autowired
