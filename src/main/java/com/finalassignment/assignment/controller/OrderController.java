@@ -34,9 +34,4 @@ public class OrderController {
     public OrderDto getOrderLatest(@PathVariable int customerId) {
         return orderService.showOrderLatest(customerId);
     }
-
-    @DeleteMapping("/{orderId}")
-    public void deleteOrder(@PathVariable int orderId) {
-        orderService.deleteOrder(orderId);
-    }
 }
