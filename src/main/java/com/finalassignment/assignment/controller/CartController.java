@@ -43,11 +43,6 @@ public class CartController {
     public void deleteItemFromCart(@PathVariable int cartDetailId) {
         cartService.deleteItemFromCart(cartDetailId);
     }
-
-    @GetMapping
-    public List<CartDto> showCart() {
-        return cartService.showAllCart();
-    }
 }
 
 
