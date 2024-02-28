@@ -1,7 +1,6 @@
 package com.finalassignment.assignment.controller;
 
 import com.finalassignment.assignment.dto.ItemDto;
-import com.finalassignment.assignment.model.Item;
 import com.finalassignment.assignment.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/items")
@@ -30,7 +28,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public Optional<Item> getItemById(@PathVariable int itemId) {
+    public ItemDto getItemById(@PathVariable int itemId) {
         return itemService.showItemById(itemId);
     }
 
