@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -48,7 +47,7 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
     }
 
     @Override
-    public ItemDto showItemById(int itemId){
+    public ItemDto showItemById(int itemId) {
         findItemId(itemId);
         ItemDto itemDto = ItemMapper.INSTANCE.toDto(itemRepo.findById(itemId).get());
         logger.info("ItemFound: {}", getMessage("ItemFound"));
