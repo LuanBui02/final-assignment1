@@ -41,14 +41,11 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     private CartDetailRepo cartDetailRepo;
     private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
-    private List<Order> showOrder(int customerId) {
+    private void showOrder(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
-
         if (customerOptional.isPresent()) {
-
-            return orderRepo.findListOrderByCustomerId(customerId);
+            orderRepo.findListOrderByCustomerId(customerId);
         }
-        return null;
     }
 
     private void checkOrderEmpty(int orderId) {
@@ -71,8 +68,10 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     public List<OrderDto> showOrderDto(int customerId) {
         checkCustomerEmpty(customerId);
         checkOrderEmpty(customerId);
+        showOrder(customerId);
+        List<OrderDto> orderDto = OrderMapper.INSTANCE.toListDto(orderRepo.findListOrderByCustomerId(customerId));
         logger.info("OrderFound: {}", getMessage("OrderFound"));
-        return OrderMapper.INSTANCE.toListDto(showOrder(customerId));
+        return orderDto;
     }
 
     @Override
@@ -106,15 +105,17 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
         } else {
             checkCustomerEmpty(orderCustomerDto.getCustomerId());
         }
-        logger.info("OrderAdded: {}", getMessage("OrderAdded"));
         OrderMapper.INSTANCE.toDto(order);
+        logger.info("OrderAdded: {}", getMessage("OrderAdded"));
     }
 
     @Override
     public OrderDto showOrderLatest(int customerId) {
         checkOrderEmpty(customerId);
         checkCustomerEmpty(customerId);
+        showOrderDto(customerId);
+        OrderDto orderDto = OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
         logger.info("OrderFound: {}", getMessage("OrderFound"));
-        return OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
+        return orderDto;
     }
 }
