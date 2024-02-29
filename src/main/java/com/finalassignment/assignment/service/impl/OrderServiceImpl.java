@@ -41,19 +41,13 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     private CartDetailRepo cartDetailRepo;
     private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
 
-    private void showOrder(int customerId) {
-        Optional<Customer> customerOptional = customerRepo.findById(customerId);
-        if (customerOptional.isPresent()) {
-            orderRepo.findListOrderByCustomerId(customerId);
+    private List<OrderDto> checkOrderEmpty(int customerId) {
+        List<OrderDto> orderDto = OrderMapper.INSTANCE.toListDto(orderRepo.findListOrderByCustomerId(customerId));
+        if (orderDto.isEmpty()) {
+            logger.error("OrderNotFound: {}", getMessage("OrderNotFound"));
+            throw new OrderNotFoundException(customerId);
         }
-    }
-
-    private void checkOrderEmpty(int orderId) {
-        List<Order> orderOptional = orderRepo.findListOrderByCustomerId(orderId);
-        if (orderOptional.isEmpty()) {
-            logger.error("CustomerNotFound: {}", getMessage("CustomerNotFound"));
-            throw new OrderNotFoundException(orderId);
-        }
+        return orderDto;
     }
 
     private void checkCustomerEmpty(int customerId) {
@@ -64,12 +58,14 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
         }
     }
 
+    private Order getOrderLatest(int customerId) {
+        return orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId);
+    }
+
     @Override
     public List<OrderDto> showOrderDto(int customerId) {
         checkCustomerEmpty(customerId);
-        checkOrderEmpty(customerId);
-        showOrder(customerId);
-        List<OrderDto> orderDto = OrderMapper.INSTANCE.toListDto(orderRepo.findListOrderByCustomerId(customerId));
+        List<OrderDto> orderDto = checkOrderEmpty(customerId);
         logger.info("OrderFound: {}", getMessage("OrderFound"));
         return orderDto;
     }
@@ -79,31 +75,30 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
         Optional<Customer> customerOptional = customerRepo.findById(orderCustomerDto.getCustomerId());
 
         Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(orderCustomerDto.getCustomerId());
-
-        List<CartDetail> cartDetailOptional = cartDetailRepo.findListCartDetailByCartId(cartOptional.get().getId());
-
         Order order = null;
-
-        if (customerOptional.isPresent()) {
-            List<OrderDetail> orderDetailList = new ArrayList<>();
-            order = new Order();
-            order.setCustomer(customerOptional.get());
-            order.setOrderDate(new Date());
-            boolean checkTrue = true;
-            order.setComplete(checkTrue);
-            order.setOrderDetails(orderDetailList);
-            order = orderRepo.save(order);
-            for (CartDetail cartDetail : cartDetailOptional) {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setOrder(order);
-                orderDetail.setItem(cartDetail.getItem());
-                orderDetail.setQuantity(cartDetail.getQuantity());
-                orderDetailRepo.save(orderDetail);
-                cartDetailRepo.deleteById(cartDetail.getId());
-            }
-            order = orderRepo.findTopByCustomerIdOrderByOrderDateDesc(orderCustomerDto.getCustomerId());
-        } else {
+        if (customerOptional.isEmpty()) {
             checkCustomerEmpty(orderCustomerDto.getCustomerId());
+        } else {
+            if (cartOptional.isPresent()) {
+                List<CartDetail> cartDetailOptional = cartDetailRepo.findListCartDetailByCartId(cartOptional.get().getId());
+                List<OrderDetail> orderDetailList = new ArrayList<>();
+                order = new Order();
+                order.setCustomer(customerOptional.get());
+                order.setOrderDate(new Date());
+                boolean checkTrue = true;
+                order.setComplete(checkTrue);
+                order.setOrderDetails(orderDetailList);
+                order = orderRepo.save(order);
+                for (CartDetail cartDetail : cartDetailOptional) {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setOrder(order);
+                    orderDetail.setItem(cartDetail.getItem());
+                    orderDetail.setQuantity(cartDetail.getQuantity());
+                    orderDetailRepo.save(orderDetail);
+                    cartDetailRepo.deleteById(cartDetail.getId());
+                }
+                order = getOrderLatest(orderCustomerDto.getCustomerId());
+            }
         }
         OrderMapper.INSTANCE.toDto(order);
         logger.info("OrderAdded: {}", getMessage("OrderAdded"));
@@ -111,10 +106,9 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
 
     @Override
     public OrderDto showOrderLatest(int customerId) {
-        checkOrderEmpty(customerId);
         checkCustomerEmpty(customerId);
-        showOrderDto(customerId);
-        OrderDto orderDto = OrderMapper.INSTANCE.toDto(orderRepo.findTopByCustomerIdOrderByOrderDateDesc(customerId));
+        checkOrderEmpty(customerId);
+        OrderDto orderDto = OrderMapper.INSTANCE.toDto(getOrderLatest(customerId));
         logger.info("OrderFound: {}", getMessage("OrderFound"));
         return orderDto;
     }
