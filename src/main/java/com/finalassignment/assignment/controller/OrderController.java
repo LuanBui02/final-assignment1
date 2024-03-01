@@ -1,10 +1,8 @@
 package com.finalassignment.assignment.controller;
 
-import com.finalassignment.assignment.dto.OrderCustomerDto;
 import com.finalassignment.assignment.dto.OrderDto;
 import com.finalassignment.assignment.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +24,8 @@ public class OrderController {
     }
 
     @PostMapping()
-    public void createOrder(@RequestBody OrderCustomerDto orderCustomerDto) {
-        orderService.addOrder(orderCustomerDto);
+    public void createOrder(@RequestBody OrderDto orderDto) {
+        orderService.addOrder(orderDto);
     }
 
     @GetMapping("/latestOrder/{customerId}")
