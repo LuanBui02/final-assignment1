@@ -1,6 +1,5 @@
 package com.finalassignment.assignment.service.impl;
 
-import com.finalassignment.assignment.dto.OrderCustomerDto;
 import com.finalassignment.assignment.dto.OrderDto;
 import com.finalassignment.assignment.exception.CustomerNotFoundException;
 import com.finalassignment.assignment.exception.OrderNotFoundException;
@@ -71,13 +70,12 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     }
 
     @Override
-    public void addOrder(OrderCustomerDto orderCustomerDto) {
-        Optional<Customer> customerOptional = customerRepo.findById(orderCustomerDto.getCustomerId());
-
-        Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(orderCustomerDto.getCustomerId());
+    public void addOrder(OrderDto orderDto) {
+        Optional<Customer> customerOptional = customerRepo.findById(orderDto.getCustomerDto().getId());
+        Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(orderDto.getCustomerDto().getId());
         Order order = null;
         if (customerOptional.isEmpty()) {
-            checkCustomerEmpty(orderCustomerDto.getCustomerId());
+            checkCustomerEmpty(orderDto.getCustomerDto().getId());
         } else {
             if (cartOptional.isPresent()) {
                 List<CartDetail> cartDetailOptional = cartDetailRepo.findListCartDetailByCartId(cartOptional.get().getId());
@@ -97,7 +95,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
                     orderDetailRepo.save(orderDetail);
                     cartDetailRepo.deleteById(cartDetail.getId());
                 }
-                order = getOrderLatest(orderCustomerDto.getCustomerId());
+                order = getOrderLatest(orderDto.getCustomerDto().getId());
             }
         }
         OrderMapper.INSTANCE.toDto(order);
