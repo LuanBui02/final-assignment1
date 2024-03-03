@@ -1,8 +1,10 @@
 package com.finalassignment.assignment.service.impl;
 
+import com.finalassignment.assignment.dto.CustomerDto;
 import com.finalassignment.assignment.dto.OrderDto;
 import com.finalassignment.assignment.exception.CustomerNotFoundException;
 import com.finalassignment.assignment.exception.OrderNotFoundException;
+import com.finalassignment.assignment.mapper.CustomerMapper;
 import com.finalassignment.assignment.mapper.OrderMapper;
 import com.finalassignment.assignment.model.Cart;
 import com.finalassignment.assignment.model.CartDetail;
@@ -38,7 +40,7 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
     private CartRepo cartRepo;
     @Autowired
     private CartDetailRepo cartDetailRepo;
-    private static final Logger logger = LoggerFactory.getLogger(CartServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private List<OrderDto> checkOrderEmpty(int customerId) {
         List<OrderDto> orderDto = OrderMapper.INSTANCE.toListDto(orderRepo.findListOrderByCustomerId(customerId));
@@ -49,12 +51,13 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
         return orderDto;
     }
 
-    private void checkCustomerEmpty(int customerId) {
+    private CustomerDto checkCustomerEmpty(int customerId) {
         Optional<Customer> customerOptional = customerRepo.findById(customerId);
         if (customerOptional.isEmpty()) {
             logger.error("CustomerNotFound: {}", getMessage("CustomerNotFound"));
             throw new CustomerNotFoundException(customerId);
         }
+        return CustomerMapper.INSTANCE.toDto(customerOptional.get());
     }
 
     private Order getOrderLatest(int customerId) {
@@ -71,35 +74,34 @@ public class OrderServiceImpl extends AbstractMessage implements OrderService {
 
     @Override
     public void addOrder(OrderDto orderDto) {
-        Optional<Customer> customerOptional = customerRepo.findById(orderDto.getCustomerDto().getId());
         Optional<Cart> cartOptional = cartRepo.findCartByCustomerId(orderDto.getCustomerDto().getId());
         Order order = null;
-        if (customerOptional.isEmpty()) {
-            checkCustomerEmpty(orderDto.getCustomerDto().getId());
-        } else {
-            if (cartOptional.isPresent()) {
-                List<CartDetail> cartDetailOptional = cartDetailRepo.findListCartDetailByCartId(cartOptional.get().getId());
-                List<OrderDetail> orderDetailList = new ArrayList<>();
-                order = new Order();
-                order.setCustomer(customerOptional.get());
-                order.setOrderDate(new Date());
-                boolean checkTrue = true;
-                order.setComplete(checkTrue);
-                order.setOrderDetails(orderDetailList);
-                order = orderRepo.save(order);
-                for (CartDetail cartDetail : cartDetailOptional) {
-                    OrderDetail orderDetail = new OrderDetail();
-                    orderDetail.setOrder(order);
-                    orderDetail.setItem(cartDetail.getItem());
-                    orderDetail.setQuantity(cartDetail.getQuantity());
-                    orderDetailRepo.save(orderDetail);
-                    cartDetailRepo.deleteById(cartDetail.getId());
-                }
-                order = getOrderLatest(orderDto.getCustomerDto().getId());
+        CustomerDto customerDto = checkCustomerEmpty(orderDto.getCustomerDto().getId());
+        if (cartOptional.isPresent()) {
+            List<CartDetail> cartDetailOptional = cartDetailRepo.findListCartDetailByCartId(cartOptional.get().getId());
+            List<OrderDetail> orderDetailList = new ArrayList<>();
+            order = Order.builder()
+                    .customer(CustomerMapper.INSTANCE.toModel(customerDto))
+                    .isComplete(true)
+                    .orderDetails(orderDetailList)
+                    .orderDate(new Date())
+                    .build();
+            order = orderRepo.save(order);
+            for (CartDetail cartDetail : cartDetailOptional) {
+                OrderDetail orderDetail = OrderDetail.builder()
+                        .order(order)
+                        .item(cartDetail.getItem())
+                        .quantity(cartDetail.getQuantity())
+                        .build();
+                orderDetailRepo.save(orderDetail);
+                cartDetailRepo.deleteById(cartDetail.getId());
             }
+            order = getOrderLatest(orderDto.getCustomerDto().getId());
         }
+        checkOrderEmpty(orderDto.getCustomerDto().getId());
         OrderMapper.INSTANCE.toDto(order);
         logger.info("OrderAdded: {}", getMessage("OrderAdded"));
+
     }
 
     @Override
