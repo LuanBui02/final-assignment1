@@ -17,16 +17,16 @@ CREATE TABLE cart_details
     id         number GENERATED ALWAYS AS IDENTITY NOT NULL,
     cart_id    number,
     item_id    number,
-    quantity   number,
-    date_added date,
+    quantity   number not null,
+    date_added date not null,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE items
 (
     id    number GENERATED ALWAYS AS IDENTITY NOT NULL ,
-    name  varchar(255),
-    price number,
+    name  varchar(255) not null ,
+    price number not null ,
     PRIMARY KEY (id)
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE order_details
     id       number GENERATED ALWAYS AS IDENTITY NOT NULL,
     order_id number,
     item_id  number,
-    quantity number,
+    quantity number not null,
     PRIMARY KEY (id)
 );
 
