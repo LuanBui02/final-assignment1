@@ -24,10 +24,10 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private int price;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)

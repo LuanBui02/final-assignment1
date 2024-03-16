@@ -15,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -56,6 +57,14 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
 
     @Override
     public void addItems(ItemDto itemDto) {
+        if(itemDto.getPrice() == 0) {
+            throw new RuntimeException("Price can not equal to 0");
+        }
+        for(Item item: itemRepo.findAll()) {
+            if (Objects.equals(item.getName(), itemDto.getName())) {
+                throw new RuntimeException("Name is already added");
+            }
+        }
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
         logger.info("ItemAdded: {}", getMessage("ItemAdded"));
     }
