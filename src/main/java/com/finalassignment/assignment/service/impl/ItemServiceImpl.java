@@ -1,6 +1,8 @@
 package com.finalassignment.assignment.service.impl;
 
 import com.finalassignment.assignment.dto.ItemDto;
+import com.finalassignment.assignment.exception.EmptyPriceException;
+import com.finalassignment.assignment.exception.ItemDuplicatedException;
 import com.finalassignment.assignment.exception.ItemNotFoundByIdException;
 import com.finalassignment.assignment.exception.ItemNotFoundException;
 import com.finalassignment.assignment.mapper.ItemMapper;
@@ -34,7 +36,17 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
 
         }
     }
-
+    private void checkValidate(ItemDto itemDto) {
+        List<Item> itemList = itemRepo.findAll();
+        if(itemDto.getPrice() == 0) {
+            throw new EmptyPriceException();
+        }
+        for(Item item: itemList) {
+            if (Objects.equals(item.getName(), itemDto.getName())) {
+                throw new ItemDuplicatedException();
+            }
+        }
+    }
     @Override
     public List<ItemDto> showAllItem() {
         List<Item> list = itemRepo.findAll();
@@ -57,20 +69,16 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
 
     @Override
     public void addItems(ItemDto itemDto) {
-        if(itemDto.getPrice() == 0) {
-            throw new RuntimeException("Price can not equal to 0");
-        }
-        for(Item item: itemRepo.findAll()) {
-            if (Objects.equals(item.getName(), itemDto.getName())) {
-                throw new RuntimeException("Name is already added");
-            }
-        }
+        checkValidate(itemDto);
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
         logger.info("ItemAdded: {}", getMessage("ItemAdded"));
     }
 
     @Override
     public void updateItem(ItemDto itemDto) {
+        if(itemDto.getPrice() == 0) {
+            throw new EmptyPriceException();
+        }
         findItemId(itemDto.getId());
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
         logger.info("ItemUpdated: {}", getMessage("ItemUpdated"));
