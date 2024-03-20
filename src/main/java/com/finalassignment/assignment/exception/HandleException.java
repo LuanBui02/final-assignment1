@@ -38,4 +38,14 @@ public class HandleException {
         ErrorMessage error = new ErrorMessage("Error: 5", orderNotFoundException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(ItemDuplicatedException.class)
+    public ResponseEntity<ErrorMessage> handleItemDuplicated(ItemDuplicatedException itemDuplicatedException) {
+        ErrorMessage error = new ErrorMessage("Error: 6", itemDuplicatedException.getMessage());
+        return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(error);
+    }
+    @ExceptionHandler(EmptyPriceException.class)
+    public ResponseEntity<ErrorMessage> handlePrice(EmptyPriceException emptyPriceException) {
+        ErrorMessage error = new ErrorMessage("Error: 7", emptyPriceException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }
