@@ -13,7 +13,7 @@ import java.util.List;
 public class ItemDto {
     private int id;
     private String name;
-    private int price;
+    private Integer price;
     @JsonIgnore
     private List<CartDetailDto> cartDetailsDto;
     @JsonIgnore

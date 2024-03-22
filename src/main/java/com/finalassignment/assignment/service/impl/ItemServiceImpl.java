@@ -36,13 +36,26 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
 
         }
     }
-    private void checkValidate(ItemDto itemDto) {
+    private void checkValidateAddItem(ItemDto itemDto) {
         List<Item> itemList = itemRepo.findAll();
-        if(itemDto.getPrice() == 0) {
+        if(itemDto.getPrice() == null || itemDto.getPrice() < 0) {
             throw new EmptyPriceException();
         }
         for(Item item: itemList) {
-            if (Objects.equals(item.getName(), itemDto.getName())) {
+            if (Objects.equals(item.getName().toUpperCase(), itemDto.getName().toUpperCase())) {
+                throw new ItemDuplicatedException();
+            }
+        }
+    }
+    private void checkValidateUpdateItem(ItemDto itemDto) {
+        List<Item> itemList = itemRepo.findAll();
+        if(itemDto.getPrice() == null || itemDto.getPrice() < 0) {
+            throw new EmptyPriceException();
+        }
+        for(Item item: itemList) {
+            String itemName = item.getName().toUpperCase();
+            String itemDtoName = itemDto.getName().toUpperCase();
+            if(item.getId() != itemDto.getId() && Objects.equals(itemName, itemDtoName)) {
                 throw new ItemDuplicatedException();
             }
         }
@@ -69,16 +82,14 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
 
     @Override
     public void addItems(ItemDto itemDto) {
-        checkValidate(itemDto);
+        checkValidateAddItem(itemDto);
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
         logger.info("ItemAdded: {}", getMessage("ItemAdded"));
     }
 
     @Override
     public void updateItem(ItemDto itemDto) {
-        if(itemDto.getPrice() == 0) {
-            throw new EmptyPriceException();
-        }
+        checkValidateUpdateItem(itemDto);
         findItemId(itemDto.getId());
         itemRepo.save(ItemMapper.INSTANCE.toModel(itemDto));
         logger.info("ItemUpdated: {}", getMessage("ItemUpdated"));
