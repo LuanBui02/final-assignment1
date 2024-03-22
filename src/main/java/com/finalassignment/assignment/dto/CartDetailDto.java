@@ -17,7 +17,7 @@ public class CartDetailDto {
     @JsonIgnore
     private CartDto cartDto;
     private ItemDto itemDto;
-    private int quantity;
+    private Integer quantity;
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dateAdded;

@@ -11,5 +11,5 @@ public class OrderDetailDto {
     private int id;
     private OrderDto orderDto;
     private ItemDto itemDto;
-    private int quantity;
+    private Integer quantity;
 }

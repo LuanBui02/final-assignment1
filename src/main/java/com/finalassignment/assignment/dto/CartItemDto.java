@@ -11,5 +11,5 @@ public class CartItemDto {
     private int id;
     private int customerId;
     private int itemId;
-    private int quantity;
+    private Integer quantity;
 }
