@@ -13,10 +13,12 @@ import com.finalassignment.assignment.util.AbstractMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -33,16 +35,17 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
         if (itemById.isEmpty()) {
             logger.error("ItemNotFoundById: {}", getMessage("NotFoundItemById"));
             throw new ItemNotFoundByIdException(itemId);
-
         }
     }
     private void checkValidateAddItem(ItemDto itemDto) {
         List<Item> itemList = itemRepo.findAll();
         if(itemDto.getPrice() == null || itemDto.getPrice() < 0) {
+            logger.error("ValidateException: {}", getMessage("SmallerThanZero"));
             throw new EmptyPriceException();
         }
         for(Item item: itemList) {
             if (Objects.equals(item.getName().toUpperCase(), itemDto.getName().toUpperCase())) {
+                logger.error("Duplicate: {}", getMessage("DuplicateError"));
                 throw new ItemDuplicatedException();
             }
         }
@@ -50,12 +53,14 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
     private void checkValidateUpdateItem(ItemDto itemDto) {
         List<Item> itemList = itemRepo.findAll();
         if(itemDto.getPrice() == null || itemDto.getPrice() < 0) {
+            logger.error("ValidateException: {}", getMessage("SmallerThanZero"));
             throw new EmptyPriceException();
         }
         for(Item item: itemList) {
             String itemName = item.getName().toUpperCase();
             String itemDtoName = itemDto.getName().toUpperCase();
             if(item.getId() != itemDto.getId() && Objects.equals(itemName, itemDtoName)) {
+                logger.error("Duplicate: {}", getMessage("DuplicateError"));
                 throw new ItemDuplicatedException();
             }
         }
@@ -75,7 +80,11 @@ public class ItemServiceImpl extends AbstractMessage implements ItemService {
     @Override
     public ItemDto showItemById(int itemId) {
         findItemId(itemId);
-        ItemDto itemDto = ItemMapper.INSTANCE.toDto(itemRepo.findById(itemId).get());
+        Optional<Item> itemOptional = itemRepo.findById(itemId);
+        ItemDto itemDto = null;
+        if(itemOptional.isPresent()) {
+             itemDto = ItemMapper.INSTANCE.toDto(itemOptional.get());
+        }
         logger.info("ItemFound: {}", getMessage("ItemFound"));
         return itemDto;
     }

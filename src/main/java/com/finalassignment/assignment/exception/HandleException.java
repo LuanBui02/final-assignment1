@@ -44,8 +44,23 @@ public class HandleException {
         return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(error);
     }
     @ExceptionHandler(EmptyPriceException.class)
-    public ResponseEntity<ErrorMessage> handlePrice(EmptyPriceException emptyPriceException) {
+    public ResponseEntity<ErrorMessage> handlePriceEmpty(EmptyPriceException emptyPriceException) {
         ErrorMessage error = new ErrorMessage("Error: 7", emptyPriceException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+    @ExceptionHandler(DuplicateNameException.class)
+    public ResponseEntity<ErrorMessage> handleDuplicateName(DuplicateNameException duplicateNameException) {
+        ErrorMessage error = new ErrorMessage("Error: 8", duplicateNameException.getMessage());
+        return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(error);
+    }
+    @ExceptionHandler(NotFoundInListException.class)
+    public ResponseEntity<ErrorMessage> handleNotFoundInList(NotFoundInListException notFoundInListException) {
+        ErrorMessage error = new ErrorMessage("Error: 9", notFoundInListException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+    @ExceptionHandler(ValidateTypeException.class)
+    public ResponseEntity<ErrorMessage> handleTypeException(ValidateTypeException validateTypeException) {
+        ErrorMessage error = new ErrorMessage("Error: 10", validateTypeException.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

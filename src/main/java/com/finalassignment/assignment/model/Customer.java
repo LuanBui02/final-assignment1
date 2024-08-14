@@ -31,7 +31,7 @@ public class Customer {
     private String password;
 
     @Column(name = "type")
-    private String type;
+    private int type;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cart> carts;

@@ -3,7 +3,6 @@ package com.finalassignment.assignment.controller;
 import com.finalassignment.assignment.dto.CartDto;
 import com.finalassignment.assignment.dto.CartItemDto;
 import com.finalassignment.assignment.service.CartService;
-import com.finalassignment.assignment.service.impl.CartServiceImpl;
 import com.finalassignment.assignment.util.AbstractMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/carts")
 public class CartController extends  AbstractMessage{
     @Autowired

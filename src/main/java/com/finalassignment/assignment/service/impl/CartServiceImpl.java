@@ -97,20 +97,22 @@ public class CartServiceImpl extends AbstractMessage implements CartService {
     public CartDto addItemToCart(CartItemDto cartItemDto) {
         Cart cart = showCart(cartItemDto.getCustomerId());
         Optional<Item> itemOptional = itemRepo.findById(cartItemDto.getItemId());
-        if (itemOptional.isPresent()) {
-            Item item = itemOptional.get();
+
+        if(itemOptional.isPresent()) {
             CartDetail cartDetail = new CartDetail();
+
             cartDetail.setCart(cart);
-            cartDetail.setItem(item);
+            cartDetail.setItem(itemOptional.get());
             cartDetail.setQuantity(cartItemDto.getQuantity());
             cartDetail.setDateAdded(new Date());
+
             cartDetailRepo.save(cartDetail);
         } else {
             checkItemEmpty(cartItemDto.getItemId());
         }
         checkCustomerEmpty(cartItemDto.getCustomerId());
         CartDto cartDto = CartMapper.INSTANCE.toDto(cart);
-        logger.info("CartAdded: {}", getMessage("CartAdded"));
+        logger.info("CartAdd: {}", getMessage("CartAdded"));
         return cartDto;
     }
 

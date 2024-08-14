@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetailDto {
-    private int id;
+    private Integer id;
     private OrderDto orderDto;
     private ItemDto itemDto;
     private Integer quantity;

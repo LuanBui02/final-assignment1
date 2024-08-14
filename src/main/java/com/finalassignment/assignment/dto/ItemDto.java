@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
-    private int id;
+    private Integer id;
     private String name;
     private Integer price;
     @JsonIgnore

@@ -13,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDetailDto {
-    private int id;
+    private Integer id;
     @JsonIgnore
     private CartDto cartDto;
     private ItemDto itemDto;
